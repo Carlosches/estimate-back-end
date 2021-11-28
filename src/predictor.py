@@ -3,6 +3,7 @@ from joblib import dump, load
 import pandas as pd
 import numpy as np
 from geopy.distance import geodesic
+import os
 
 def getDf(area, rooms, bathrooms, garages, sel, lon, lat):
     df = pd.DataFrame({'area': [], 'rooms': [], 'bathrooms': [], 'garages': [
@@ -26,7 +27,7 @@ def prediction(area, rooms, bathrooms, garages, sel, lon, lat):
     rooms1 = np.log1p(rooms1)
 
     df = getDf(area1, rooms1, bathrooms1, garages1, sel1, lon1, lat1)
-    clf = load('files/regressor.joblib')
+    clf = load('src/files/regressor.joblib')
     result = clf.predict(df)
     pred = np.expm1(result).tolist()
     return pred[0]

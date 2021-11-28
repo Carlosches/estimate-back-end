@@ -1,12 +1,14 @@
 from HouseEncoder import HouseEncoder
 from json import decoder
-from flask import Flask, render_template, request,jsonify
+from flask import Flask, render_template, request,jsonify, Blueprint
+from flask_cors import CORS
 import json
 import predictor
 
 app = Flask(__name__)
 price = 0
 
+CORS(app)
 # @app.route('/')
 # def home():
 #     return render_template('index.html')
@@ -15,21 +17,20 @@ price = 0
 # def about():
 #     return render_template("about.html")
 
-@app.route('/predict', methods=['GET','POST'])
+@app.route('/predict', methods=['POST'])
 def predict():
-    if request.method == 'POST':
-        property = request.get_json()
-        area= property['area']
-        rooms= property['rooms']
-        bathrooms= property['bathrooms']
-        garages= property['garages']
-        sel= property['sel']
-        lon= property['longitude']
-        lan= property['latitude']
+    property = request.get_json()
+    area= property['area']
+    rooms= property['rooms']
+    bathrooms= property['bathrooms']
+    garages= property['garages']
+    sel= property['sel']
+    lon= property['longitude']
+    lan= property['latitude']
 
-        price = predictor.prediction(area,rooms,bathrooms,garages,sel,lon,lan)
-        price_predicted = {'price': price}
-        return jsonify(price_predicted)
+    price = predictor.prediction(area,rooms,bathrooms,garages,sel,lon,lan)
+    price_predicted = {'price': price}
+    return jsonify(price_predicted)
 
 @app.route('/houses', methods=['GET', 'POST'])
 def nearHouses():
