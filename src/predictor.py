@@ -28,7 +28,7 @@ def prediction(area, rooms, bathrooms, garages, sel, lon, lat):
 
     df = getDf(area1, rooms1, bathrooms1, garages1, sel1, lon1, lat1)
     clf = load('src/files/regressor.joblib')
-    result = clf.predict(df)
+    result = clf.predict(df.values)
     pred = np.expm1(result).tolist()
     return pred[0]
 
